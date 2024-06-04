@@ -2,6 +2,7 @@ package com.example.finalproject._core.error;
 
 import com.example.finalproject._core.error.exception.*;
 import com.example.finalproject._core.utils.ApiUtil;
+import jakarta.servlet.http.HttpServlet;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,8 +23,10 @@ public class MyExceptionHandler {
     }
 
     @ExceptionHandler(Exception401.class)
-    public ResponseEntity<?> ex401(Exception401 e){
+    public ResponseEntity<?> ex401(Exception401 e, HttpServletRequest request){
         log.warn("401 : " + e.getMessage());
+        log.warn("IP : " + request.getRemoteAddr());
+        log.warn("Agent : " + request.getHeader("User-Agent"));
         ApiUtil<?> apiUtil = new ApiUtil<>(401, e.getMessage());
         return new ResponseEntity<>(apiUtil, HttpStatus.UNAUTHORIZED);
     }
@@ -48,6 +51,13 @@ public class MyExceptionHandler {
     public ResponseEntity<?> ex500(Exception500 e){
         log.error("500 : " + e.getMessage());
         ApiUtil<?> apiUtil = new ApiUtil<>(500, e.getMessage());
+        return new ResponseEntity<>(apiUtil, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    public ResponseEntity<?> unknownServerError(Exception500 e, HttpServletRequest request){
+        request.setAttribute("msg", e.getMessage());
+        log.error("500 : " + e.getMessage());
+        ApiUtil<?> apiUtil = new ApiUtil(500, e.getMessage());
         return new ResponseEntity<>(apiUtil, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
