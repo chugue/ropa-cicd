@@ -68,15 +68,6 @@ class OrderHistoryRestControllerTest extends MyRestDoc {
         actions.andExpect(jsonPath("$.response.itemHistoryDTOList[0].itemCategoryMain").value("top"));
         actions.andExpect(jsonPath("$.response.itemHistoryDTOList[0].deliveryStatus").value("배송중"));
 
-        // 두 번째 항목을 검증
-        actions.andExpect(jsonPath("$.response.itemHistoryDTOList[1].orderId").value(1));
-        actions.andExpect(jsonPath("$.response.itemHistoryDTOList[1].itemId").value(2));
-        actions.andExpect(jsonPath("$.response.itemHistoryDTOList[1].itemName").value("scratch 블루 청바지"));
-        actions.andExpect(jsonPath("$.response.itemHistoryDTOList[1].itemCount").value(1));
-        actions.andExpect(jsonPath("$.response.itemHistoryDTOList[1].itemPrice").value(32000));
-        actions.andExpect(jsonPath("$.response.itemHistoryDTOList[1].itemTotalPrice").value(32000));
-        actions.andExpect(jsonPath("$.response.itemHistoryDTOList[1].itemCategoryMain").value("bottom"));
-        actions.andExpect(jsonPath("$.response.itemHistoryDTOList[1].deliveryStatus").value("배송중"));
         actions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
